@@ -1,0 +1,343 @@
+!!Namelist for MEND configuration
+!!Updated: May 2, 2019
+
+&mend_config
+!!----------------------------------------------------------------------------------
+!!Select Model Run
+!! iModel = 0: run MEND; 
+!! iModel = 1: optimization; 
+!! iModel = 2: COFI (Critical Objective Function Index): only output UQpar.out; 
+!! iModel = 3: Sobol Sensitivity; 
+!! iModel = 4: MCMC (Markov Chain Monte Carlo)
+!! iModel = 5: COFI (Critical Objective Function Index): output both UQpar.out & UQvar.out; 
+    iModel = 0
+    
+!!Carbon_only ("C") or Carbon-Nitrogen ("CN") 
+    ssMEND = 'CN'
+
+!!select a range of rows to compute obj for iModel=3 (Sobol Sensitivity)
+    iSA_range(1:2) = 293821, 300000 
+
+!!----------------------------------------------------------------------------------
+!!(1) sINI%iKinetics: Decomposition Kinetics (sINI%iKinetics = 0:Michaelis-Menten & MOM decomposition; 10: M-M & QOM decomposition; 1:1st Order, 2:2nd Order, 11:No-Enz-Mic);
+!!(2) sINI%iHR: sINI%iHR: HR calculation method [0: potential uptake, 1: actual uptake];
+!!(3) sINI%iTmp_Func: temperature response function [0: Arrhenius Equation, 1: Q10 Equation]
+!!(4) sINI%iENZN_Allocate: Nitrogen Enzyme Allocation: [0-weighting factor = N pool, 1-weighting factor = N-Pool/Half-saturation-constant]
+    siKinetics      = 0
+    siHR            = 0
+    siTmp_Func      = 0
+    siENZN_Allocate = 1
+
+!!----------------------------------------------------------------------------------
+!!Site Name (used as prefix of output files)
+    sSite = 'aCaN'
+!!BIOME !!'ASM' = arid|semiarid|mediterranean; 'MGC'=mesic grassland & cropland; 'MDF'=Mesic Deciduous Forest; 'MCF'=MEsic Conifer Forest; used by fSWP()
+    sBIOME ='MGC'
+!!SOM !!'SOD' = disturbed soil; 'SOL'=intact soil; 'LIT'=litter; used by fSWP()                 
+    sSOM = 'SOL'
+!!Site Altitude [m]
+    Altitude = 282
+!!----------------------------------------------------------------------------------    
+!!Directories for input and output
+    Dir_Input   = 'userio/inp/'
+    Dir_Output  = 'userio/out/'
+!!----------------------------------------------------------------------------------
+!!All Input Data (Temperature|Water|Litter) starting|ending date
+    ssDate_beg_all = '19980101'
+    ssDate_end_all = '20091231'
+!!Simulation starting|ending date [CURRENTLY sDate_beg_sim >= sDate_beg_all]
+    ssDate_beg_sim = '19980101'
+!!    ssDate_end_sim = '20991231'
+    ssDate_end_sim = '20090831'
+!!----------------------------------------------------------------------------------
+!!soil initialization file; 
+    sSOIL_INI_file = 'SOIL_INI.dat'
+
+!!----------------------------------------------------------------------------------
+!!INPUT DATA:
+!!soil TEMPERATURE data: [0-No,1-Yes], units, time-step ['hourly','daily','monthly'], # of files
+    ifdata_ST   = 1
+    sUnits_ST   = 'C'
+    step_ST     = 'daily'
+    nfile_ST    = 1
+    sfilename_ST = 'STP_day.dat'
+    ST_constant = 20
+
+!!soil rentention curve; van-Genuchten equation; used by fSWC2SWP()|fSWP2SWC() [Tuller & Or, 2004]
+    vg_SWCres   = 0.067   
+    vg_SWCsat   = 0.370   
+    vg_alpha    = 0.021    
+    vg_n        = 1.610
+
+!!Saturated hydraulic conductivity (cm/h)
+    Ksat        = 15
+    Lambda      = 0.298
+
+!!soil MOISTURE data: ifdata_SM [0-No,1-Yes], units ['percent','none'], time-step ['hourly','daily','monthly'], # of files
+    ifdata_SM   = 1
+    sUnits_SM   = 'percent'
+    step_SM     = 'daily'
+    nfile_SM    = 1
+    sfilename_SM = 'SWC_day.dat'
+    SM_constant = 45
+
+!!Type-1 INPUT (GPP or litter fall), whether provide data; or constant input (gdw: g dry mass):
+!! Average GPP or litter input [mgC/cm2/d]; 
+    GPPref = 0.3911       !! GPPref/2400 = 1.6297E-04 mgC/cm3/h
+
+!! iGPPscaler = 0: exp[(GPP/GPPref - 1)*b]; 1: (GPP/GPPref)**b; 
+    iGPPscaler = 0
+
+!![0-No,1-Yes], units, time-step, # of files
+    ifdata_type1    = 1
+    sUnits_type1    = 'mgC-cm2-d'
+    step_type1      = 'daily'
+    nfile_type1     = 1
+    sfilename_type1 = 'SIN_day.dat'
+    Input_type1_constant = 0
+    
+!!Type-1 INPUT (litter fall), Fraction to POC1, POC2, DOC pools; see [Bonan et al., GCB, 2013, 19, 957-974]
+    Fraction_type1  = 0.07, 0.37, 0.56
+
+!!Type-2 INPUT (coarse wood), [mgC/cm2/h] to POC1, POC2, DOC pools <only annual amount available>
+    Input_type2     = 0.00, 0.00, 0.00
+
+!!Type-3 INPUT (roots),TOTAL Input [mgC/cm2] to POC1, POC2, DOC pools bewteen sDate_beg_inp2, sDate_end_inp2
+    Input_type3     = 0.00, 0.00, 0.00
+    ssDate_beg_inp2 = '20090801'
+    ssDate_end_inp2 = '20111031'
+
+!!SIN_C12_C14 [ratio of C12 to C14 in SOC input];   
+    sSIN_C12_C14 = 2.0d5
+!!SIN_Multiplier [multiplier for litter input during post-data period simulation]
+    sSIN_Multiplier = 1.0
+
+!!soil pH data: [0-No,1-Yes], units, time-step, # of files
+    ifdata_pH   = 1
+    sUnits_pH   = 'pH'
+    step_pH     = 'monthly'
+    nfile_pH    = 1
+    sfilename_pH = 'SPH_mon.dat'
+    spH_constant = 5.6
+!!----------------------------------------------------------------------------------
+!!C:N [mg-C/mg-N] litterfall, CWD(course woody debris), root
+    CN_ratio_input  = 30, 168, 41
+!!NH4 INPUT: e.g., deposition, fertilization
+    ifdata_NH4      = 0
+    sUnits_NH4      = 'mgN-cm2-h'
+    step_NH4        = 'monthly'
+    nfile_NH4       = 1
+    sfilename_NH4   = 'NH4dep2009_2012.dat'
+    NH4_constant    = 3.4e-5
+
+!!NO3 INPUT: e.g., deposition, fertilization
+    ifdata_NO3      = 0
+    sUnits_NO3      = 'mgN-cm2-h'
+    step_NO3        = 'monthly'
+    nfile_NO3       = 1
+    sfilename_NO3   = 'NO3dep2009_2012.dat'
+    NO3_constant    = 1.2e-5
+
+!!----------------------------------------------------------------------------------
+!!iScenario: Scenario design: 1(1-yr mean hourly data), 2(multiple-year hourly data)      
+    siScenario  = 2
+    sSTP_delta  = 0.0
+!!     sSTP_delta = 0.010145 
+
+!!                      SWC_pmin,   SWC_r,      SWC_t0;
+    sSWC_logis(1:3) =   0.55,       0.0,        1983.0
+!!     sSWC_logis(1:3) = 0.55,       0.037,      1983.0
+
+!!                      SIN_beta0,  SIN_beta1,  SIN_t0,     SIN_fDOC_delta 
+    sSIN_logis(1:4) =   1.24,       0.0,        1982.0,     0.0
+!!    sSIN_logis(1:4) =   1.24,       0.0,        1982.0,     0.0006
+
+!!----------------------------------------------------------------------------------
+
+    Cali_var_title = 'VARid', 'VAR', 'Units', 'Calibrate', 'tstep', 'obs_file', 'obs_file_column', 'OBJ', 'Weight','Tolerance'
+    
+!!# of Variables:    nVAR = 28
+!!CALIBRATION DATA stored in Dir_Input <tstep=0(hourly),1(daily),2(monthly),3(seasonal),4(yearly), 5(mean_last2year), 6(mean_last_80%_data)>
+    Cali_varid(1:4)             =  1,                   2,                  3,                  4
+    Cali_VAR(1:4)               = 'Rh',                 'Ra',               'Rs',              'MBC'
+    Cali_Units(1:4)             = 'mgC-cm3-h',          'mgC-cm3-h',        'mgC-cm3-h',       'mgC-cm3'
+    Cali_Calibrate(1:4)         =  1,                   0,                  0,                  1
+    Cali_tstep(1:4)             =  1,                   1,                  1,                  5
+    Cali_obs_file(1:4)          = 'Rh.obs',             'Ra.obs',           'Rs.obs',          'MBC.obs'
+    Cali_obs_file_column(1:4)   =  2,                   2,                  2,                  2
+    Cali_OBJ(1:4)               = 'NSEC',               'NSEC',             'NSEC',             'MARt'
+    Cali_OBJ_Weight(1:4)        =  0,                   0,                  10,                 0
+    Cali_OBJ_Tolerance(1:4)     =  0,                   0,                  0,                  0.1
+
+    Cali_varid(5:8)             =  5,                   6,                  7,                  8         
+    Cali_VAR(5:8)               = 'CO2',                'SOC',              'SOC_ISO',          'EA_LIG'
+    Cali_Units(5:8)             = 'mgC-cm3-h',          'mgC-cm3',          'permil',          'mgC-cm3-h'
+    Cali_Calibrate(5:8)         =  0,                   1,                  0,                  0
+    Cali_tstep(5:8)             =  1,                   5,                  2,                  2    
+    Cali_obs_file(5:8)          = 'Rh.obs',            'SOC.obs',          'SO_ISO.obs',       'ENZC_LIG.obs'
+    Cali_obs_file_column(5:8)   =  2,                   2,                  2,                  2
+    Cali_OBJ(5:8)               = 'AVGr',               'MARt',             'MARE',            'CORR'
+    Cali_OBJ_Weight(5:8)        =  2,                   0                   0,                  2
+    Cali_OBJ_Tolerance(5:8)     =  1.0,                 0.05,               0,                  0
+
+    Cali_varid(9:12)            =  9,                   10,                 11,                 12
+    Cali_VAR(9:12)              = 'EA_CEL',            'EA_MOM',           'SOM_CN',            'MB_CN'
+    Cali_Units(9:12)            = 'mgC-cm3-h',          'mgC-cm3-h',        'mgC-mgN',          'mgC-mgN'
+    Cali_Calibrate(9:12)        =  0,                   0,                  0,                  0
+    Cali_tstep(9:12)            =  2,                   4,                  5,                  1
+    Cali_obs_file(9:12)         = 'ENZC_CEL.obs',       'ENZ_MOM.obs',      'SOM_CN.obs',       'MB_CN.obs'
+    Cali_obs_file_column(9:12)  =  2,                   2,                  2,                  2
+    Cali_OBJ(9:12)              = 'CORR',               'CORR',             'MARE',             'MARE'
+    Cali_OBJ_Weight(9:12)       =  2,                   0,                  10,                 5
+    Cali_OBJ_Tolerance(9:12)    =  0,                   0,                  0,                  0
+
+    Cali_varid(13:16)           =  13,                  14,                 15,                 16
+    Cali_VAR(13:16)             = 'DOM_CN',             'NH4',              'NO3',              'NO3+NO2'
+    Cali_Units(13:16)           = 'mgC-mgN',            'mgN-cm3',          'mgN-cm3',          'mgN-cm3'
+    Cali_Calibrate(13:16)       =  0,                   1,                  0,                  1
+    Cali_tstep(13:16)           =  1,                   2,                  2,                  2
+    Cali_obs_file(13:16)        = 'SOM_CN.obs',         'NH4.obs',          'NO3.obs',          'NO3_NO2.obs'
+    Cali_obs_file_column(13:16) =  2,                   2,                  2,                  2
+    Cali_OBJ(13:16)             = 'MARE',               'MARE',             'AVGr',             'MARE'
+    Cali_OBJ_Weight(13:16)      =  5,                   10,                 10,                 10
+    Cali_OBJ_Tolerance(13:16)   =  0,                   0.2,                1.0,                0.2
+  
+    Cali_varid(17:20)           =  17,                  18,                 19,                 20
+    Cali_VAR(17:20)             = 'ENZC_LIG',           'ENZC_CEL',         'ENZC_MOM',         'ENZNmt'
+    Cali_Units(17:20)           = 'mgC-cm3',            'mgC-cm3',          'mgC-cm3',          'mgC-cm3'
+    Cali_Calibrate(17:20)       =  0,                   0,                  0,                  0
+    Cali_tstep(17:20)           =  2,                   2,                  2,                  4
+    Cali_obs_file(17:20)        = 'ENZC_LIG.obs',       'ENZC_CEL.obs',     'ENZC_MOM.obs',     'ENZNmt.obs'
+    Cali_obs_file_column(17:20) =  2,                   2,                  2,                  2
+    Cali_OBJ(17:20)             = 'CORR',               'CORR',             'CORl',             'AVGr'
+    Cali_OBJ_Weight(17:20)      =  2,                   2,                  0,                  10
+    Cali_OBJ_Tolerance(17:20)   =  0,                   0,                  0,                  1.0
+
+    Cali_varid(21:24)           =  21,                  22,                 23,                 24
+    Cali_VAR(21:24)             = 'Nmine_Solid',        'NFix',              'Nmn_net',         'Nim_VG'
+    Cali_Units(21:24)           = 'mgN-cm3',            'mgN-cm3-h',        'mgN-cm3-h',       'mgC-cm3-h'
+    Cali_Calibrate(21:24)       =  0,                   1,                  1,                  1
+    Cali_tstep(21:24)           =  2,                   5,                  4,                  5
+    Cali_obs_file(21:24)        = 'Nmine_Solid.obs',   'NFix.obs',          'Nmn_net.obs',     'Nim_plant.obs'
+    Cali_obs_file_column(21:24) =  2,                   2,                  2,                  2
+    Cali_OBJ(21:24)             = 'MARE',               'MARt',             'MARt',             'MARt'
+    Cali_OBJ_Weight(21:24)      =  10,                  5,                  2,                  2
+    Cali_OBJ_Tolerance(21:24)   =  0,                   0.2,                0.5,                0.5
+
+    Cali_varid(25:28)           =  25,                  26,                 27,                 28
+    Cali_VAR(25:28)             = 'Nitrif',             'Denitrif',         'N2O',              'NO_N2O'
+    Cali_Units(25:28)           = 'mgN-cm3-h',          'mgN-cm3-h',        'mgN-cm3-h',       'mgC-cm3-h'
+    Cali_Calibrate(25:28)       =  1,                   0,                  0,                  0
+    Cali_tstep(25:28)           =  4,                   5,                  4,                  5
+    Cali_obs_file(25:28)        = 'Nitrif.obs',        'Denitrif.obs',      'N2O.obs',         'NO_N2O.obs'
+    Cali_obs_file_column(25:28) =  2,                   2,                  2,                  2
+    Cali_OBJ(25:28)             = 'MARt',               'MARt',             'MARE',             'MARt'
+    Cali_OBJ_Weight(25:28)      =  2,                   2,                  0,                  2
+    Cali_OBJ_Tolerance(25:28)   =  0.9,                 0.1,                 0,                 0.5
+
+!!----------------------------------------------------------------------------------
+!! SCE parameters
+!!                              nrun        maxn        kstop       ngs     ideflt
+    SCE_Parameters =            2,          10000,      10,         2,     1
+!!                              npg         nps         nspl        mings   iniflg  iprint
+    SCE_control_Parameters =    13,         7,          13,         2,      0,      1
+
+!!----------------------------------------------------------------------------------
+!c  INITIAL PARAMETER VALUES AND THE PARAMETER BOUNDS
+!!# of Parameters    nPar = 41
+    
+    Pname(1:2)      =   'LF0', 'r0'
+    Pinitial(1:2)   =   0.3,    0.01
+    Plow(1:2)       =   0.1,    0.01
+    Phigh(1:2)      =   1.0,    1.0
+    Pcal(1:2)       =   0,      0
+
+    Pname(3:5)      =   'fRa',  'fINP',  'VP',  
+    Pinitial(3:5)   =   0.2,    0.4,    2.0  
+    Plow(3:5)       =   0.1,    0.2,    0.1   
+    Phigh(3:5)      =   0.4,    0.5,    100.0  
+    Pcal(3:5)       =   0,      0,      0
+
+    Pname(6:8)      =   'KP1',  'fKM',  'PAR2'
+    Pinitial(6:8)   =   50.0,   10.0,    500.0
+    Plow(6:8)       =   10.0,   2.0,    100.0
+    Phigh(6:8)      =   100.0,  20.0,   1000.0
+    Pcal(6:8)       =   0,      0,      0
+
+    Pname(9:11)     =   'Qmax', 'Kba',  'Kdes'
+    Pinitial(9:11)  =   1.7,    6.0,    0.003
+    Plow(9:11)      =   0.5,    1.0,    0.0001
+    Phigh(9:11)     =   5.0,    16.0,   0.01
+    Pcal(9:11)      =   0,      0,      0
+
+    Pname(12:14)    =   'rE ',  'pEP',  'fpEM'
+    Pinitial(12:14) =   0.003,  0.01,   1.0
+    Plow(12:14)     =   0.0001, 0.001,  0.1
+    Phigh(12:14)    =   0.01,   0.1,    5.0
+    Pcal(12:14)     =   0,      0,      0
+
+    Pname(15:16)    =   'fD',   'gD'
+    Pinitial(15:16) =   0.5,   0.38
+    Plow(15:16)     =   0.1,    0.1
+    Phigh(15:16)    =   0.9,    1.0
+    Pcal(15:16)     =   0,      0
+
+    Pname(17:19)    =   'Vg',   'alpha','KD'
+    Pinitial(17:19) =   0.01,   0.2,    0.26
+    Plow(17:19)     =   0.001,  0.01,   0.0001
+    Phigh(17:19)    =   0.1,    0.5,    0.50
+    Pcal(17:19)     =   0,      0,      0
+
+    Pname(20:21)    =   'Yg',   'Ygsl'
+    Pinitial(20:21) =   0.30,   0.01
+    Plow(20:21)     =   0.10,   0.001
+    Phigh(20:21)    =   0.60,   0.016
+    Pcal(20:21)     =   0,      0
+
+    Pname(22:24)    =   'Q10','gamma','beta'
+    Pinitial(22:24) =   2.0,    1.0,    0.001
+    Plow(22:24)     =   1.2,    0.01,   0.0005
+    Phigh(22:24)    =   2.5,    20.0,   0.05
+    Pcal(22:24)     =   0,      0,      0
+
+    Pname(25:27)    =   'WPA2D','tau',  'wdorm'
+    Pinitial(25:27) =   0.4,    0.25,   4.0
+    Plow(25:27)     =   0.01,   0.1,    1.0
+    Phigh(25:27)    =   0.6,    0.95,   6.0
+    Pcal(25:27)     =   0,      0,      0
+
+    Pname(28:30)    =   'VNup_MB',  'KsNH4_MB', 'KsNO3_MB'
+    Pinitial(28:30) =   1e-3,       1e-3,       1e-3
+    Plow(28:30)     =   1e-4,       1e-4,       1e-4
+    Phigh(28:30)    =   1e-1,       1e-2,       1e-2
+    Pcal(28:30)     =   1,          0,          0
+
+    Pname(31:34)    =   'VNif', 'VNit', 'VDenit1',  'fpENZN'
+    Pinitial(31:34) =   1e-3,   1e-1    1e-3,       1
+    Plow(31:34)     =   1e-4,   1e-1,   1e-5,       1e-1  
+    Phigh(31:34)    =   1e-1,   1e+3,   1,       1e+1
+    Pcal(31:34)     =   1,      1,      1,          0
+
+    Pname(35:38)    =   'KsNif','KsNit','KsDenit1','KsDenit2'
+    Pinitial(35:38) =   0.003,  0.01,   0.01,   0.01
+    Plow(35:38)     =   1e-4,   1e-4,   1e-4,   1e-4  
+    Phigh(35:38)    =   1,      1e-1,   1e-1,   1e-1
+    Pcal(35:38)     =   0,      0,      0,      0
+
+    Pname(39:43)    =   'VNup_VG','KsNH4_VG','KsNO3_VG', 'rNleach', 'bNup_VG'
+    Pinitial(39:43) =   1e-5,       1e-3,       1e-3,    0.05,       1.0
+    Plow(39:43)     =   1e-6,       1e-4,       1e-4,    1e-3,       0.01 
+    Phigh(39:43)    =   1e-3,       1e-2,       1e-2,    1.0,        1.0
+    Pcal(39:43)     =   1,          0,          0,       0,          0
+
+    Pname(44:47)    =   'Qmax_NH4',   'Kba_NH4',    'Kp2u', 'Ku2p'
+    Pinitial(44:47) =   1e-4,          1e2,         1e-3,   1e-3
+    Plow(44:47)     =   1e-5,          1,           1e-7,   1e-5
+    Phigh(44:47)    =   1e-2,          1e4,         1e-2,   1e-2
+    Pcal(44:47)     =   1,             0,           0,      0
+
+ !!                   LF0              r0             fRa            fINP              VP             KP1             fKM            PAR2            Qmax             Kba            Kdes              rE             pEP            fpEM              fD              gD              Vg           alpha              KD              Yg            Ygsl             Q10           gamma            beta           WPA2D             tau           wdorm         VNup_MB        KsNH4_MB        KsNO3_MB            VNif            VNit         VDenit1          fpENZN           KsNif           KsNit        KsDenit1        KsDenit2         VNup_VG        KsNH4_VG        KsNO3_VG          rNleach         bNup_VG        Qmax_NH4         Kba_NH4            Kp2u            Ku2p
+ !!best:   
+    Pinitial = 0.10000000,     0.01000000,     0.20000000,     0.30000000,    50.00000000,    60.00000000,    10.00000000,   999.00000000,     1.50000000,     6.00000000,     0.00600000,     0.00012289,     0.00147568,     4.50361918,     0.75000000,     0.50000000,     0.00425194,     0.05012233,     0.00010034,     0.20109320,     0.00520677,     1.80000000,     0.01030726,     0.00100000,     0.46000000,     0.39000000,     3.38000000,     0.10000000,     0.00018000,     0.00041000,     0.06350410,   185.28188371,     0.86952628,     1.00000000,     0.10000000,     0.00120000,     0.00180000,     0.00180000,     0.00003296,     0.00120000,     0.00180000,     0.02000000,     0.50000000,     0.00574420,   100.00000000,     0.00000500,     0.00100000,
+
+ /  
