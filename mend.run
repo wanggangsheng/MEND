@@ -1,0 +1,22 @@
+#!/bin/csh -f
+#==============================================================================
+#USERDEFINED
+# This is where the batch submission is set.  The above code computes
+# the total number of tasks, nodes, and other things that can be useful
+# here.  Use PBS, BSUB, or whatever the local environment supports.
+#===============================================================================
+
+#PBS -N MEND
+#PBS -q batch
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=48:00:00
+#PBS -r n
+#PBS -j oe
+#PBS -S /bin/csh -V
+#PBS -A ccsi
+#PBS -W group_list=cades-ccsi
+#PBS -l qos=condo
+
+cd ~/models/MEND  #$PWD
+mpirun -np 1 ./mend>&aaa.txt
+

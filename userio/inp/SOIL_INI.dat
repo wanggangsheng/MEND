@@ -1,0 +1,31 @@
+nrow= 26			
+Depth: cm; SOC/POC/MOC/MBC: mgC/cm3					
+ID	Property	 Value
+1	Depth			100
+2	Sand			0.887
+3	Clay			0.015
+4	CN_MB_mean		6.6
+5	CN_MB_min		2
+6	CN_MB_max		14
+7	CN_EP1			3
+8	CN_EP2			3
+9	CN_EM			3
+10	fQOM			0.05
+11	SOC				1.578
+12	POC				0.377
+13	MOC				1.064
+14	DOC				0.137
+15	MBC				0.033
+16	EP1				6.0e-5
+17	EP2				6.0e-5
+18	EM				6.0e-5
+19	CN_SOM			9
+20	CN_POM			26
+21	CN_MOM			8
+22	CN_DOM			8
+23	CN_MB			6.6
+24	NH4				5.5e-4
+25	NO3				1.5e-4
+26	rCN_LIG2LAB		2
+
+
