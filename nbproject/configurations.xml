@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>src/MEND_IN.F90</itemPath>
+        <itemPath>src/MEND_main.F90</itemPath>
+        <itemPath>src/MOD_MCMC.F90</itemPath>
+        <itemPath>src/MOD_MEND.F90</itemPath>
+        <itemPath>src/MOD_MEND_TYPE.F90</itemPath>
+        <itemPath>src/MOD_OPT.F90</itemPath>
+        <itemPath>src/MOD_OPT_TYPE.F90</itemPath>
+        <itemPath>src/MOD_STRING.F90</itemPath>
+        <itemPath>src/MOD_USRFS.F90</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>MEND.ini</itemPath>
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>src</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <fortranCompilerTool>
+          <commandlineTool>/usr/local/gfortran-8.2/bin/gfortran</commandlineTool>
+          <commandLine>-ffpe-trap=invalid,zero,overflow -finit-local-zero</commandLine>
+        </fortranCompilerTool>
+        <linkerTool>
+          <linkerDynSerch>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </linkerDynSerch>
+        </linkerTool>
+      </compileType>
+      <item path="src/MEND_IN.F90" ex="false" tool="2" flavor2="0">
+        <fortranCompilerTool>
+          <additionalDep>${OBJECTDIR}/src/MOD_STRING.o ${OBJECTDIR}/src/MOD_USRFS.o ${OBJECTDIR}/src/MOD_MEND_TYPE.o ${OBJECTDIR}/src/MOD_MEND.o ${OBJECTDIR}/src/MOD_OPT_TYPE.o</additionalDep>
+        </fortranCompilerTool>
+      </item>
+      <item path="src/MEND_main.F90" ex="false" tool="2" flavor2="0">
+        <fortranCompilerTool>
+          <additionalDep>${OBJECTDIR}/src/MOD_USRFS.o ${OBJECTDIR}/src/MOD_MEND_TYPE.o ${OBJECTDIR}/src/MOD_MEND.o ${OBJECTDIR}/src/MOD_OPT_TYPE.o ${OBJECTDIR}/src/MOD_OPT.o ${OBJECTDIR}/src/MOD_MCMC.o</additionalDep>
+        </fortranCompilerTool>
+      </item>
+      <item path="src/MOD_MCMC.F90" ex="false" tool="2" flavor2="0">
+        <fortranCompilerTool>
+          <additionalDep>${OBJECTDIR}/src/MOD_USRFS.o ${OBJECTDIR}/src/MOD_MEND.o ${OBJECTDIR}/src/MOD_OPT_TYPE.o</additionalDep>
+        </fortranCompilerTool>
+      </item>
+      <item path="src/MOD_MEND.F90" ex="false" tool="2" flavor2="0">
+        <fortranCompilerTool>
+          <additionalDep>${OBJECTDIR}/src/MOD_USRFS.o ${OBJECTDIR}/src/MOD_MEND_TYPE.o</additionalDep>
+        </fortranCompilerTool>
+      </item>
+      <item path="src/MOD_MEND_TYPE.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_OPT.F90" ex="false" tool="2" flavor2="0">
+        <fortranCompilerTool>
+          <additionalDep>${OBJECTDIR}/src/MOD_USRFS.o ${OBJECTDIR}/src/MOD_MEND.o ${OBJECTDIR}/src/MOD_OPT_TYPE.o</additionalDep>
+        </fortranCompilerTool>
+      </item>
+      <item path="src/MOD_OPT_TYPE.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_STRING.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_USRFS.F90" ex="false" tool="2" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <linkerDynSerch>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </linkerDynSerch>
+        </linkerTool>
+      </compileType>
+      <item path="src/MEND_IN.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MEND_main.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_MCMC.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_MEND.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_MEND_TYPE.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_OPT.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_OPT_TYPE.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_STRING.F90" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="src/MOD_USRFS.F90" ex="false" tool="2" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
